@@ -1,0 +1,19 @@
+networks:
+  api-network:
+
+volumes:
+  db-data:
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - api-network
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: student-management-poc
+    volumes:
+      - db-data:/var/lib/postgresql/data

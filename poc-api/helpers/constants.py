@@ -1,0 +1,4 @@
+VALID_EMAIL_REGEX = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+
+MINIMUM_PASSWORD_LENGTH = 8
+MAXIMUM_PASSWORD_LENGTH = 32
