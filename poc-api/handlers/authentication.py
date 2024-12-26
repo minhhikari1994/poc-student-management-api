@@ -15,17 +15,17 @@ class LoginHandler(MethodView):
             request_body.get('password')
         )
         if not login_result:
-            return jsonify(dict(
+            return jsonify(
                 success=False,
                 message=message
-            ), 401)
+            ), 401
         
         db.session.commit()
 
-        return jsonify(dict(
+        return jsonify(
             success=True,
             message=message
-        ), 200)
+        ), 200
 
 class LogoutHandler(MethodView):
     decorators = [login_required]

@@ -18,17 +18,17 @@ class UserAccountHandler(MethodView):
         is_success, message = create_user_account(login_id, password, is_admin)
         
         if not is_success:
-            return jsonify(dict(
+            return jsonify(
                 success=False,
                 message=message
-            ), 400)
+            ), 400
         
         db.session.commit()
         
-        return jsonify(dict(
+        return jsonify(
             success=True,
             message=message
-        ), 201)
+        ), 201
 
 
 user_account_endpoint_view = UserAccountHandler.as_view('user_account_endpoint_view')
