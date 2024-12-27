@@ -12,15 +12,22 @@ def create_app(test_config=None):
     load_dotenv()
 
     app.config.from_mapping(
-        SECRET_KEY=os.environ.get('SECRET_KEY'),
-        SQLALCHEMY_DATABASE_URI=os.environ.get('SQLALCHEMY_DATABASE_URI')
+        SQLALCHEMY_DATABASE_URI=os.environ.get('SQLALCHEMY_DATABASE_URI'),
+        SESSION_COOKIE_DOMAIN=os.getenv("SESSION_COOKIE_DOMAIN"),
+        SESSION_COOKIE_SAME_SITE='Lax',
+        SECRET_KEY=os.getenv("SECRET_KEY")
     )
+
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
 
-    CORS(app)
+    CORS(
+        app,
+        supports_credentials=True,
+        origins=os.getenv("CORS_ORIGINS").split(",")
+    )
 
     login_manager.init_app(app)
 
