@@ -11,7 +11,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return jsonify(dict(
+    return jsonify(
         success=False,
         message='Unauthorized access'
-    ), 401)
+    ), 401

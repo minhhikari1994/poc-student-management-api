@@ -32,10 +32,10 @@ class LogoutHandler(MethodView):
 
     def post(self):
         is_success, message = logout()
-        return jsonify(dict(
+        return jsonify(
             success=True,
             message=message
-        ), 200)
+        ), 200
 
 login_endpoint_view = LoginHandler.as_view('login_endpoint')
 logout_endpoint_view = LogoutHandler.as_view('logout_endpoint')
