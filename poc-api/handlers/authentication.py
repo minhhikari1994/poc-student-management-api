@@ -8,6 +8,13 @@ from ..models.base import db
 authentication_bp = Blueprint('authentication_bp', __name__)
 
 class LoginHandler(MethodView):
+    @login_required
+    def get(self):
+        return jsonify(
+            success=True,
+            message='You are already logged in'
+        ), 200
+
     def post(self):
         request_body = request.json
         login_result, message = login(
@@ -44,6 +51,11 @@ authentication_bp.add_url_rule(
     '/login',
     view_func=login_endpoint_view,
     methods=['POST']
+)
+authentication_bp.add_url_rule(
+    '/auth_check',
+    view_func=login_endpoint_view,
+    methods=['GET']
 )
 authentication_bp.add_url_rule(
     '/logout',
