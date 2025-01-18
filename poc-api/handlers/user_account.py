@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask.views import MethodView
+from flask_login import login_required
 
 from ..models.base import db
 
