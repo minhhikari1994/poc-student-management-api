@@ -13,11 +13,15 @@ class Unit(db.Model):
     grade = db.relationship('Grade', foreign_keys=[grade_id])
     students = db.relationship('Student', secondary='student_unit')
 
-    def to_json(self):
-        return dict(
+    def to_json(self, include_student_list=False):
+        result = dict(
             id=self.id,
             unit_id=self.unit_id,
             name=self.name,
             grade_id=self.grade_id,
             grade_name=self.grade.name
         )
+
+        if include_student_list:    
+            result['students'] = list(map(lambda student: student.to_json(), self.students))
+        return result

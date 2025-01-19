@@ -33,9 +33,9 @@ def import_student_data(student_excel_file, study_year_code, unit_code):
                 student_code=int(student.get('STT'))
             ),
             saint_name=student.get('Tên Thánh'),
-            first_name=student.get('Họ').split(' ')[0],
+            first_name=student.get('Tên'),
             middle_name=__get_middle_name(student.get('Họ')),
-            last_name=student.get('Tên'),
+            last_name=student.get('Họ').split(' ')[0],
             gender=__get_gender(student.get('Giới Tính')),
             date_of_birth=__get_date_of_birth(student.get('Ngày sinh').strip()) if student.get('Ngày sinh') else None,
             address_one=None,

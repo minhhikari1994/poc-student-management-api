@@ -1,10 +1,10 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from flask.views import MethodView
 from flask_login import login_required
 
 from ..models.base import db
 from ..models import Result
-from ..services.unit import get_all_units, get_student_list_in_a_unit
+from ..services.unit import get_all_units, get_unit_by_id
 
 unit_bp = Blueprint('unit_bp', __name__)
 
@@ -25,12 +25,24 @@ class UnitStudentsHandler(MethodView):
     decorators = [login_required]
 
     def get(self, unit_id):
-        result = get_student_list_in_a_unit(unit_id)
-        if not result.success:
-            return result.to_json(), 400
-        return Result.success(result.message, dict(
-            students=list(map(lambda student: student.to_json(), result.data))
-        )).to_json(), 200
+        
+        unit = get_unit_by_id(unit_id)
+        if (unit is None):
+            return jsonify(
+                success=False,
+                message='Unit not found',
+                data=None
+            ), 404
+        
+        unit_json = unit.to_json(
+            include_student_list=True
+        )
+
+        return jsonify(
+            success=True,
+            message='Success',
+            data=unit_json
+        ), 200
 
 
 units_endpoint_view = UnitsHandler.as_view('units_endpoint_view')
