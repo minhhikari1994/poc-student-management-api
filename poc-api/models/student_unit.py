@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 
 from .base import db
 
-class StudentTrainingCourse(db.Model):
+class StudentUnit(db.Model):
     __tablename__ = "student_unit"
     __table_args__ = (db.PrimaryKeyConstraint("student_id", "unit_id"),)
 

@@ -5,7 +5,7 @@ from .study_year import StudyYear
 from .grade import Grade
 from .unit import Unit
 
-from .student_unit import StudentTrainingCourse
+from .student_unit import StudentUnit
 
 # The models from here and below is not included in the migration
 # but will be used as the helpers in the app
