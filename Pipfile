@@ -11,6 +11,7 @@ python-dotenv = "*"
 psycopg = {extras = ["pool", "binary"], version = "*"}
 flask-login = "*"
 flask-cors = "*"
+pandas = "*"
 
 [dev-packages]
 

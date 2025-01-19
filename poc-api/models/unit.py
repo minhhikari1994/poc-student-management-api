@@ -11,6 +11,7 @@ class Unit(db.Model):
 
     # relation
     grade = db.relationship('Grade', foreign_keys=[grade_id])
+    students = db.relationship('Student', secondary='student_unit')
 
     def to_json(self):
         return dict(
