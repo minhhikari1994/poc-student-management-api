@@ -21,6 +21,23 @@ class UnitsHandler(MethodView):
             )
         ), 200
 
+class UnitHandler(MethodView):
+    decorators = [login_required]
+
+    def get(self, unit_id):
+        unit = get_unit_by_id(unit_id)
+        if (unit is None):
+            return jsonify(
+                success=False,
+                message='Unit not found',
+                data=None
+            ), 404
+        return jsonify(
+            success=True,
+            message='Success',
+            data=unit.to_json()
+        ), 200
+
 class UnitStudentsHandler(MethodView):
     decorators = [login_required]
 
@@ -46,11 +63,18 @@ class UnitStudentsHandler(MethodView):
 
 
 units_endpoint_view = UnitsHandler.as_view('units_endpoint_view')
+unit_endpoint_view = UnitHandler.as_view('unit_endpoint_view')
 unit_students_endpoint_view = UnitStudentsHandler.as_view('unit_students_endpoint_view')
 
 unit_bp.add_url_rule(
     '/units',
     view_func=units_endpoint_view,
+    methods=['GET']
+)
+
+unit_bp.add_url_rule(
+    '/units/<unit_id>',
+    view_func=unit_endpoint_view,
     methods=['GET']
 )
 
