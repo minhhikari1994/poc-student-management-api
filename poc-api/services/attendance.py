@@ -44,3 +44,49 @@ def create_or_update_student_attendance(student: Student, attendance_date: datet
         db.session.flush()
         
     return student_attendance
+
+def __get_all_sundays_in_time_frame(start_date, end_date):
+    sundays = []
+    current_date = start_date
+    while current_date <= end_date:
+        if current_date.weekday() == 6:  # 6 corresponds to Sunday
+            sundays.append(current_date)
+        current_date += datetime.timedelta(days=1)
+    return sundays
+
+
+def get_unit_attendance_report_data(start_date, end_date, unit: Unit):
+    result = dict(
+        unit_id=unit.unit_id,
+        unit_name=unit.name,
+        sundays=__get_all_sundays_in_time_frame(start_date, end_date),
+        attendance_data=[]
+    )
+    unit_students = unit.students;
+    all_student_ids = list(map(lambda student: student.id, unit_students))
+    attendance_list = StudentAttendance.query.filter(
+        StudentAttendance.attendance_date.between(start_date, end_date),
+        StudentAttendance.student_id.in_(all_student_ids)
+    ).all()
+
+    for student in unit.students:
+        all_attendance_of_students = filter(
+            lambda att: att.student_id == student.id, attendance_list
+        )
+        student_attendance_entry = dict(
+            student_code=student.student_code,
+            saint_name=student.saint_name,
+            first_name=student.first_name,
+            middle_name=student.middle_name,
+            last_name=student.last_name,
+            attendances=list(map(lambda att: dict(
+                attendance_date=att.attendance_date,
+                mass_status=att.mass_status.value if att.mass_status else None,
+                lesson_status=att.lesson_status.value if att.lesson_status else None
+            ), all_attendance_of_students))
+        )
+        result.get('attendance_data').append(student_attendance_entry)
+        
+    return result
+    
+

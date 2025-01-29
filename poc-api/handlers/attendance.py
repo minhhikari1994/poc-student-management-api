@@ -6,8 +6,10 @@ from flask_login import login_required
 from ..models.base import db
 
 from ..services.unit import get_unit_by_id
-from ..services.attendance import get_attendance_data_for_a_unit, create_or_update_student_attendance
+from ..services.attendance import get_attendance_data_for_a_unit, create_or_update_student_attendance, get_unit_attendance_report_data
 from ..services.student import get_student_by_student_code
+
+from ..services.data_export import export_unit_attendance_report_to_excel
 
 from ..helpers.enums import AttendanceStatusEnum
 
@@ -87,8 +89,41 @@ class AttendancesHandler(MethodView):
             data=updated_student_attendance.to_json()
         ), 200
 
+class AttendancesReportHandler(MethodView):
+    decorators = [login_required]
+
+    def get(self, unit_id):
+        unit = get_unit_by_id(unit_id)
+
+        if (unit is None):
+            return jsonify(
+                success=False,
+                message='Unit not found',
+                data=None
+            ), 404
+        
+        attendance_report_data = get_unit_attendance_report_data(
+            datetime.date(2024, 11, 1),
+            datetime.date(2025, 1, 31),
+            unit
+        )
+
+        export_unit_attendance_report_to_excel(attendance_report_data)
+
+        return jsonify(
+            success=True,
+            message='Success',
+            data=attendance_report_data
+        ), 200
+
 attendance_bp.add_url_rule(
     '/attendances',
     view_func=AttendancesHandler.as_view('attendances'),
     methods=['GET', 'POST']
+)
+
+attendance_bp.add_url_rule(
+    '/attendances/<unit_id>/report',
+    view_func=AttendancesReportHandler.as_view('attendances_report'),
+    methods=['GET']
 )
