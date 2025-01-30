@@ -1,4 +1,6 @@
 import os
+from io import BytesIO
+from tempfile import NamedTemporaryFile
 from flask import current_app
 from openpyxl import load_workbook
 
@@ -50,4 +52,8 @@ def export_unit_attendance_report_to_excel(attendance_report_data):
     __populate_report_sheet(report_template_wb, 0, 'mass_status', attendance_report_data)
     __populate_report_sheet(report_template_wb, 1, 'lesson_status', attendance_report_data)
 
-    report_template_wb.save("/home/minhhikari/test_result.xlsx")
+    with NamedTemporaryFile() as tmpFile:
+        report_template_wb.save(tmpFile.name)
+        tmpFile.seek(0)
+        result_file_byte_io = BytesIO(tmpFile.read())
+        return result_file_byte_io

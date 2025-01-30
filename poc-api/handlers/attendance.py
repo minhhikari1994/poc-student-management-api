@@ -1,5 +1,5 @@
 import datetime
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_file
 from flask.views import MethodView
 from flask_login import login_required
 
@@ -103,18 +103,19 @@ class AttendancesReportHandler(MethodView):
             ), 404
         
         attendance_report_data = get_unit_attendance_report_data(
-            datetime.date(2024, 11, 1),
-            datetime.date(2025, 1, 31),
+            datetime.date(2024, 9, 1),
+            datetime.date.today(),
             unit
         )
 
-        export_unit_attendance_report_to_excel(attendance_report_data)
+        result_excel_file = export_unit_attendance_report_to_excel(attendance_report_data)
 
-        return jsonify(
-            success=True,
-            message='Success',
-            data=attendance_report_data
-        ), 200
+        return send_file(
+            result_excel_file,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name='bang-diem-danh-lop-{}.xlsx'.format(unit.unit_id)
+        )
 
 attendance_bp.add_url_rule(
     '/attendances',
