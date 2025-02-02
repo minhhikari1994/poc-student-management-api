@@ -9,7 +9,7 @@ class TestScore(db.Model):
 
     test_id = db.Column(Integer, db.ForeignKey('tests.id'), nullable=False)
     student_id = db.Column(UUID(as_uuid=True), db.ForeignKey('student.id'), nullable=False)
-    score = db.Column(db.Numeric, nullable=False)
+    score = db.Column(db.Numeric)
 
     # relation
     student = db.relationship("Student", backref="test_scores")

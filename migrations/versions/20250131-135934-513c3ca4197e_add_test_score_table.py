@@ -21,7 +21,7 @@ def upgrade():
     op.create_table('test_scores',
     sa.Column('test_id', sa.Integer(), nullable=False),
     sa.Column('student_id', sa.UUID(), nullable=False),
-    sa.Column('score', sa.Numeric(), nullable=False),
+    sa.Column('score', sa.Numeric()),
     sa.ForeignKeyConstraint(['student_id'], ['student.id'], ),
     sa.ForeignKeyConstraint(['test_id'], ['tests.id'], ),
     sa.PrimaryKeyConstraint('test_id', 'student_id')
