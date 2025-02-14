@@ -4,7 +4,7 @@ from flask_login import login_required
 
 from ..decorators.auth import admin_required
 
-from ..services.data_import import import_student_data
+from ..services.data_import import import_student_data, import_master_data_from_excel
 
 data_import_bp = Blueprint('data_import_bp', __name__)
 
@@ -20,11 +20,26 @@ class ImportStudentData(MethodView):
             message='Success',
             data=(list(map(lambda student: student.to_json(), result)))
         ), 200
-
-import_student_data_endpoint_view = ImportStudentData.as_view('import_student_data_endpoint_view')
+    
+class ImportMasterData(MethodView):
+    decorators = [login_required, admin_required]
+    def post(self):
+        master_excel_file = request.files['master_data']
+        result = import_master_data_from_excel(master_excel_file)
+        return jsonify(
+            success=True,
+            message='Success',
+            data=[]
+        ), 200
 
 data_import_bp.add_url_rule(
     '/data-import/students',
-    view_func=import_student_data_endpoint_view,
+    view_func=ImportStudentData.as_view('import_student_data_endpoint_view'),
+    methods=['POST']
+)
+
+data_import_bp.add_url_rule(
+    '/data-import/master',
+    view_func=ImportMasterData.as_view('import_master_data_endpoint_view'),
     methods=['POST']
 )
