@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask.views import MethodView
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from ..services.user_account import login, logout
 from ..models.base import db
@@ -12,7 +12,11 @@ class LoginHandler(MethodView):
     def get(self):
         return jsonify(
             success=True,
-            message='You are already logged in'
+            message='Bạn đã đăng nhập rồi',
+            data=dict(
+                name=current_user.login_id.split('@')[0],
+                email=current_user.login_id
+            )
         ), 200
 
     def post(self):
@@ -31,7 +35,11 @@ class LoginHandler(MethodView):
 
         return jsonify(
             success=True,
-            message=message
+            message=message,
+            data=dict(
+                name=current_user.login_id.split('@')[0],
+                email=current_user.login_id
+            )
         ), 200
 
 class LogoutHandler(MethodView):

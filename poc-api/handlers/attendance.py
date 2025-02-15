@@ -28,7 +28,7 @@ class AttendancesHandler(MethodView):
         except ValueError:
             return jsonify(
                 success=False,
-                message='The attendance_date must be in YYYYMMDD format'
+                message='Ngày điểm danh phải ở định dạng YYYYMMDD'
             ), 400
 
         unit = get_unit_by_id(attendance_unit)
@@ -36,7 +36,7 @@ class AttendancesHandler(MethodView):
         if (unit is None):
             return jsonify(
                 success=False,
-                message='Unit not found',
+                message='Không tìm thấy lớp học',
                 data=None
             ), 404
         
@@ -61,7 +61,7 @@ class AttendancesHandler(MethodView):
         except ValueError:
             return jsonify(
                 success=False,
-                message='The attendance_date must be in YYYYMMDD format'
+                message='Ngày điểm danh phải ở định dạng YYYYMMDD'
             ), 400
         
         existing_student = get_student_by_student_code(student_code)
@@ -69,7 +69,7 @@ class AttendancesHandler(MethodView):
         if (existing_student is None):
             return jsonify(
                 success=False,
-                message='Student not found',
+                message='Không tìm thấy học viên',
                 data=None
             ), 404
 
@@ -98,7 +98,7 @@ class AttendancesReportHandler(MethodView):
         if (unit is None):
             return jsonify(
                 success=False,
-                message='Unit not found',
+                message='Không tìm thấy lớp học',
                 data=None
             ), 404
         

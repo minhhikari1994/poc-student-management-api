@@ -30,7 +30,7 @@ def create_user_account(login_id, password, is_admin=False):
 
 def login(login_id, password):
     
-    failed_message = 'Login failed'
+    failed_message = 'Đăng nhập thất bại. Vui lòng kiếm tra lại thông tin'
     existing_account = UserAccount.query.filter_by(login_id=login_id).first()
     if existing_account is None:
         return False, failed_message
@@ -39,8 +39,8 @@ def login(login_id, password):
     
     # Call login function here
     login_user(existing_account)
-    return True, 'Login success'
+    return True, 'Đăng nhập thành công'
 
 def logout():
     logout_user()
-    return True, 'Logout success'
+    return True, 'Đăng xuất thành công'

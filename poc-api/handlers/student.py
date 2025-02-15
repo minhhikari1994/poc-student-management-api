@@ -19,7 +19,7 @@ class StudentSummaryHandler(MethodView):
         if existing_student is None:
             return jsonify(
                 success=False,
-                message='Student not found',
+                message='Không tìm thấy học viên',
                 data=None
             ), 404
         
