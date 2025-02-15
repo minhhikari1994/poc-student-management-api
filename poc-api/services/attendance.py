@@ -3,6 +3,8 @@ import datetime
 from ..models.base import db
 from ..models import StudentAttendance, Unit, Student
 
+from ..helpers.enums import AttendanceStatusEnum
+
 def __generate_student_attendance_data(student: Student, attendance_date: datetime, attendance_list: list):
     attendance_record = next((record for record in attendance_list if record.student_id == student.id), None)
     if attendance_record:
@@ -89,4 +91,52 @@ def get_unit_attendance_report_data(start_date, end_date, unit: Unit):
         
     return result
     
+def get_attendance_data_of_a_student(student: Student, start_date, end_date):
+    result = dict(
+        total_present_mass=0,
+        total_present_lesson=0,
+        total_absent_mass=0,
+        total_absent_lesson=0,
+        attendance_data=[]
+    )
+    all_sundays = __get_all_sundays_in_time_frame(start_date, end_date)
+    student_attendance_list = StudentAttendance.query.filter(
+        StudentAttendance.student_id == student.id,
+        StudentAttendance.attendance_date.between(start_date, end_date)
+    ).all()
 
+    for sunday in all_sundays:
+        student_attendance_entry = next((att for att in student_attendance_list if att.attendance_date == sunday), None)
+        if (student_attendance_entry is not None):
+            attendance_entry = dict(
+                attendance_date=sunday,
+                mass_status=student_attendance_entry.mass_status.value if student_attendance_entry.mass_status else None,
+                lesson_status=student_attendance_entry.lesson_status.value if student_attendance_entry.lesson_status else None
+            )
+            result.get('attendance_data').append(attendance_entry)
+            if student_attendance_entry.mass_status == AttendanceStatusEnum.PRESENT:
+                result['total_present_mass'] += 1
+            else:
+                result['total_absent_mass'] += 1
+            if student_attendance_entry.lesson_status == AttendanceStatusEnum.PRESENT:
+                result['total_present_lesson'] += 1                
+            else:
+                result['total_absent_lesson'] += 1
+        else:
+            result.get('attendance_data').append(dict(
+                attendance_date=sunday,
+                mass_status=None,
+                lesson_status=None
+            ))
+    
+    return result
+    
+    # for sunday in all_sundays:
+    #     student_attendance_entry = next((att for att in student_attendance_list if att.attendance_date == sunday), None)
+    #     if (student_attendance_entry is not None):
+    #         result.get('attendance_data').append(dict(
+    #             attendance_date=sunday,
+    #             mass_status=student_attendance_entry.mass_status.value if student_attendance_entry.mass_status else None,
+    #             lesson_status=student_attendance_entry.lesson_status.value if student_attendance_entry.lesson_status else None
+    #         ))
+    #         if (student_attendance_entry.mass_status == AttendanceStatusEnum.Present):

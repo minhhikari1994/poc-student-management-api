@@ -42,6 +42,7 @@ def get_test_score_of_a_student_in_a_grade(student, grade_code):
         if test_score_record:
             result.append(
                 dict(
+                    test_id=grade_test.id,
                     test_name=grade_test.name,
                     score=test_score_record.score
                 )

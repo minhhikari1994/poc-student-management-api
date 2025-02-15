@@ -19,6 +19,7 @@ class Unit(db.Model):
             unit_id=self.unit_id,
             name=self.name,
             grade_id=self.grade_id,
+            grade_code=self.grade.grade_code,
             grade_name=self.grade.name
         )
 
