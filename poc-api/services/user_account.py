@@ -28,6 +28,21 @@ def create_user_account(login_id, password, is_admin=False):
     
     return True, 'Account created successfully'
 
+def change_user_password(user: UserAccount, old_password, new_password):
+    if not check_password_hash(user.password, old_password):
+        return False, 'Mật khẩu cũ không đúng'
+    
+    if len(new_password) < constants.MINIMUM_PASSWORD_LENGTH or len(new_password) > constants.MAXIMUM_PASSWORD_LENGTH:
+        return False, 'Mật khẩu mới ít nhất 8 kí tự'
+    
+    hashed_password = generate_password_hash(
+        new_password, method='pbkdf2:sha256', salt_length=8
+    )
+    user.password = hashed_password
+    db.session.flush()
+    
+    return True, 'Đổi mật khẩu thành công'
+
 def login(login_id, password):
     
     failed_message = 'Đăng nhập thất bại. Vui lòng kiếm tra lại thông tin'
