@@ -38,6 +38,13 @@ class UserPasswordHandler(MethodView):
 
         current_password = request_body.get('current_password')
         new_password = request_body.get('new_password')
+        confirm_password = request_body.get('confirm_password')
+
+        if new_password != confirm_password:
+            return jsonify(
+                success=False,
+                message='Xác nhận mật khẩu phải trùng với mật khẩu mới'
+            ), 400
 
         is_success, message = change_user_password(current_user, current_password, new_password)
         
@@ -59,5 +66,11 @@ user_account_endpoint_view = UserAccountHandler.as_view('user_account_endpoint_v
 user_account_bp.add_url_rule(
     '/user-account',
     view_func=user_account_endpoint_view,
+    methods=['POST']
+)
+
+user_account_bp.add_url_rule(
+    '/user-account/change-password',
+    view_func=UserPasswordHandler.as_view('user_password_endpoint_view'),
     methods=['POST']
 )
