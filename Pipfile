@@ -14,6 +14,7 @@ flask-cors = "*"
 pandas = "*"
 openpyxl = "*"
 sentry-sdk = {extras = ["flask"], version = "*"}
+gunicorn = "*"
 
 [dev-packages]
 
