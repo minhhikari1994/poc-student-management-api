@@ -1,4 +1,4 @@
-import re
+import re, string, random
 
 from flask_login import login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,6 +7,16 @@ from ..helpers import constants
 
 from ..models.base import db
 from ..models.user_account import UserAccount
+
+def __generate_strong_password(length=16):
+    chars = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(random.choice(chars) for _ in range(length))
+    if (any(c.isupper() for c in password) 
+        and any(c.islower() for c in password) 
+        and any(c.isdigit() for c in password) 
+        and any(c in string.punctuation for c in password)):
+        return password
+    return __generate_strong_password(length)
 
 def create_user_account(login_id, password, is_admin=False):
     if re.match(constants.VALID_EMAIL_REGEX, login_id) is None:
@@ -27,6 +37,23 @@ def create_user_account(login_id, password, is_admin=False):
     db.session.flush()
     
     return True, 'Account created successfully'
+
+def create_user_account_from_cli(login_id, is_admin=False):
+    random_password = __generate_strong_password()
+    result, message = create_user_account(login_id, random_password, is_admin)
+    if result:
+        return True, random_password
+    else:
+        return False, message
+
+def reset_user_password(user: UserAccount):
+    new_password = __generate_strong_password()
+    hashed_password = generate_password_hash(
+        new_password, method='pbkdf2:sha256', salt_length=8
+    )
+    user.password = hashed_password
+    db.session.flush()
+    return True, new_password
 
 def change_user_password(user: UserAccount, old_password, new_password):
     if not check_password_hash(user.password, old_password):
