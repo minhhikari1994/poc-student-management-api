@@ -12,6 +12,7 @@ from .handlers.student import student_bp
 from .handlers.data_import import data_import_bp
 
 from .commands.user_commands import user_commands_bp
+from .commands.master_data_commands import master_data_cli_bp
 
 def register_blueprints(app, url_prefix):
     app.register_blueprint(health_check_bp, url_prefix=url_prefix)
@@ -25,3 +26,4 @@ def register_blueprints(app, url_prefix):
     app.register_blueprint(data_import_bp, url_prefix=url_prefix)
     #cli
     app.register_blueprint(user_commands_bp, cli_group="user")
+    app.register_blueprint(master_data_cli_bp, cli_group="masterdata")
