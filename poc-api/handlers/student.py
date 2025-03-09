@@ -26,7 +26,7 @@ class StudentSummaryHandler(MethodView):
         student_test_scores = get_test_score_of_a_student_in_a_grade(existing_student, grade_code)
         student_attendance = get_attendance_data_of_a_student(
             existing_student,
-            datetime.date(2024, 9, 1),
+            datetime.date(2025, 3, 2),
             datetime.date.today(),
         )
 

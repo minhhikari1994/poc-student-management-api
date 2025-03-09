@@ -103,7 +103,7 @@ class AttendancesReportHandler(MethodView):
             ), 404
         
         attendance_report_data = get_unit_attendance_report_data(
-            datetime.date(2024, 9, 1),
+            datetime.date(2025, 3, 2),
             datetime.date.today(),
             unit
         )

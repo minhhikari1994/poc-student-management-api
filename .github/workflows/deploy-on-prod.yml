@@ -1,0 +1,20 @@
+name: Deploy on production
+
+on: [workflow_call, workflow_dispatch]
+
+jobs:
+  deploy-to-prod:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - name: Deploying to PROD server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.PROD_SERVER_ADDR }}
+        username: ${{ secrets.PROD_SERVER_USER }}
+        key: ${{ secrets.PROD_SERVER_LOGIN_KEY }}
+        port: ${{ secrets.PROD_SERVER_PORT }}
+        script: |
+          cd /home/minhhikari/deployments/giaolypoc/giaolypoc-be
+          docker compose pull
+          docker compose up -d
