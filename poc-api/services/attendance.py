@@ -125,8 +125,8 @@ def get_attendance_data_of_a_student(student: Student, start_date, end_date):
         else:
             result.get('attendance_data').append(dict(
                 attendance_date=sunday,
-                mass_status=None,
-                lesson_status=None
+                mass_status=AttendanceStatusEnum.ABSENT.value,
+                lesson_status=AttendanceStatusEnum.ABSENT.value
             ))
     
     return result
