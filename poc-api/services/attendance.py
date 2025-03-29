@@ -13,8 +13,8 @@ def __generate_student_attendance_data(student: Student, attendance_date: dateti
         return StudentAttendance(
             student=student,
             attendance_date=attendance_date,
-            mass_status=None,
-            lesson_status=None,
+            mass_status=AttendanceStatusEnum.ABSENT.value,
+            lesson_status=AttendanceStatusEnum.ABSENT.value,
         )
 
 def get_attendance_data_for_a_unit(attendance_date, unit: Unit):
@@ -83,8 +83,8 @@ def get_unit_attendance_report_data(start_date, end_date, unit: Unit):
             last_name=student.last_name,
             attendances=list(map(lambda att: dict(
                 attendance_date=att.attendance_date,
-                mass_status=att.mass_status.value if att.mass_status else None,
-                lesson_status=att.lesson_status.value if att.lesson_status else None
+                mass_status=att.mass_status.value if att.mass_status else AttendanceStatusEnum.ABSENT.value,
+                lesson_status=att.lesson_status.value if att.lesson_status else AttendanceStatusEnum.ABSENT.value
             ), all_attendance_of_students))
         )
         result.get('attendance_data').append(student_attendance_entry)
