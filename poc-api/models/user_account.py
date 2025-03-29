@@ -15,3 +15,5 @@ class UserAccount(db.Model, UserMixin):
     login_id = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.Text(), nullable=False)
     is_admin = db.Column(db.Boolean(), default=False, server_default="false", nullable=False)
+    is_locked = db.Column(db.Boolean(), default=False, server_default="false", nullable=False)
+    failed_login_count = db.Column(db.Integer(), default=0, server_default='0', nullable=False)

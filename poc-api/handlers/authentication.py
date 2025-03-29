@@ -25,14 +25,15 @@ class LoginHandler(MethodView):
             request_body.get('login_id'),
             request_body.get('password')
         )
+        
+        db.session.commit()
+        
         if not login_result:
             return jsonify(
                 success=False,
                 message=message
             ), 401
         
-        db.session.commit()
-
         return jsonify(
             success=True,
             message=message,
