@@ -128,6 +128,8 @@ def get_attendance_data_of_a_student(student: Student, start_date, end_date):
                 mass_status=AttendanceStatusEnum.ABSENT.value,
                 lesson_status=AttendanceStatusEnum.ABSENT.value
             ))
+            result['total_absent_mass'] += 1
+            result['total_absent_lesson'] += 1
     
     return result
     
