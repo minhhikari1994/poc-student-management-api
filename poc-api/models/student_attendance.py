@@ -21,7 +21,7 @@ class StudentAttendance(db.Model):
         return dict(
             student=self.student.to_json(),
             attendance_date=self.attendance_date,
-            mass_status=self.mass_status.value if self.mass_status else None,
-            lesson_status=self.lesson_status.value if self.lesson_status else None
+            mass_status=self.mass_status.value if self.mass_status else AttendanceStatusEnum.ABSENT.value,
+            lesson_status=self.lesson_status.value if self.lesson_status else AttendanceStatusEnum.ABSENT.value
         )
 
