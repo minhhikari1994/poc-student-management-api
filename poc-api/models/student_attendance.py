@@ -25,3 +25,4 @@ class StudentAttendance(db.Model):
             lesson_status=self.lesson_status.value if self.lesson_status else AttendanceStatusEnum.ABSENT.value
         )
 
+

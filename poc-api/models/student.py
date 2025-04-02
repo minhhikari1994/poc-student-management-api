@@ -22,6 +22,11 @@ class Student(db.Model):
     address_one = db.Column(db.String(100))
     address_two = db.Column(db.String(100))
 
+    @property
+    def full_name(self):
+        full_name_arr = [self.last_name, self.middle_name, self.first_name]
+        return ' '.join(filter(lambda name_seg: name_seg is not None and name_seg.strip() != "", full_name_arr))
+
     
     def to_json(self):
         return dict(
@@ -36,3 +41,13 @@ class Student(db.Model):
             address_one=self.address_one,
             address_two=self.address_two,
         )
+
+    @property
+    def qr_code_str(self):
+        church_name="Tam Hà"
+        student_code=self.student_code
+        full_name=self.full_name
+        gender= "Nam" if self.gender == StudentGenderEnum.MALE else "Nữ"
+        return f"{church_name}|{student_code}|{full_name}|{gender}"
+
+
