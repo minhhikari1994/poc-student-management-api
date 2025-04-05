@@ -10,7 +10,6 @@ class Unit(db.Model):
     grade_id = db.Column(Integer, db.ForeignKey('grade.id'), nullable=False)
 
     # relation
-    grade = db.relationship('Grade', foreign_keys=[grade_id])
     students = db.relationship('Student', secondary='student_unit')
 
     def to_json(self, include_student_list=False):

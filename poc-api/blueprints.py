@@ -13,7 +13,7 @@ from .handlers.data_import import data_import_bp
 
 from .commands.user_commands import user_commands_bp
 from .commands.master_data_commands import master_data_cli_bp
-from .commands.student_commands import student_cli_bp
+from .commands.card_gen_commands import card_gen_cli
 
 def register_blueprints(app, url_prefix):
     app.register_blueprint(health_check_bp, url_prefix=url_prefix)
@@ -28,4 +28,4 @@ def register_blueprints(app, url_prefix):
     #cli
     app.register_blueprint(user_commands_bp, cli_group="user")
     app.register_blueprint(master_data_cli_bp, cli_group="masterdata")
-    app.register_blueprint(student_cli_bp, cli_group="student")
+    app.register_blueprint(card_gen_cli, cli_group="cardgen")
